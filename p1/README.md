@@ -13,6 +13,8 @@ show how variables can and can't be assigned to values
 * show how `1..2` is a `Range<Int>`
 * show how `"the sum is ${1 + 1}"` is a `String`
 * show how `listOf(1,2,3)` is a `List<Int>`
+* show how everything's an expreson: `val result = if (true) 1 else 2`
+* show how everything's a unified interface: `val list: List<Int> = listOf(1,2,3)`; `val array : Array<Int> = arrayOf(1,2,3)`
 
 ## functions, putting the fun back in functions
 
@@ -45,14 +47,41 @@ class MyApplicationRunner : ApplicationRunner, BaseRunner() {
 
 ```
 val runner  = object : ApplicationRunner {
-  override fun run(args: ApplicationArguments) {
-    
+    override fun run(args: ApplicationArguments) {
     }
 }
 ```
 
+* data classes
+```
+data class Person(val name: String, val age: Int)
+```
+
+## functions++ 
+
+* extension methods. two things happening in this example: method is added to `String`, and the callback takes place in the context of `String`
+```
+fun String.apply(block: String.() -> Unit): String  {
+    block()
+    return this
+}
+```
+
+* operator overloading 
+```
+data class Point(val x: Int, val y: Int) {
+    operator fun plus(other: Point): Point {
+        return Point(x + other.x, y + other.y)
+    }
+}
+val p1 = Point(1,2)
+val p2 = Point(3,4)
+val p3 = p1 + p2
+print (p3)
+```
+
 ## lambdas
-* show how lambdas can lign with an interface:
+* show how lambdas can align with an interface:
 ```
 val myHandler: ApplicationRunner = { println("Hello World!") }
 ```
@@ -83,22 +112,27 @@ val list = listOf(1,2,3)
 list.forEach { println(it) }
 ```
 
+## functional transformations
+
+* `.map `: `val x = listOf(1, 2, 3, 4, 5).map { it * 2 }`
+
+* `.let` : kind of like if u could map a single variable; transforms the value to another value
+```
+    fun print(range: IntRange) = println(range)
+    val result  = (1..2).let {
+        print(it)
+        it.sum()
+    }
+```
+
+* `.apply`: lets u work in the context of the receiver
+```
+    val result = (1..2)
+        .apply { print(this.first) }
+        .let {
+            it.sum()
+        }
+```
 
 
-## outline
 
-* intro to Kotlin (Josh)
-    * `val`/`var`
-    * expression oriented (if / else , switched etc)
-    * structural lambdas
-    * extension functions
-    * no primitives
-    * string interpolation
-    * effect oriented `.apply` / `.let` etc
-    * inheritance
-    * data classes
-    * operator overloads
-    * blocks from lambda params
-    * unified interfaces (Array<Int> vs int[])
-* bootiful Kotlin 101 (Josh)
-* Kotlin and beyond (James)

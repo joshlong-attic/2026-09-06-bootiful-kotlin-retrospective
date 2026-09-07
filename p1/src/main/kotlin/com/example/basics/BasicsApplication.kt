@@ -3,20 +3,39 @@ package com.example.basics
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
-@SpringBootApplication
-class BasicsApplication
+//@SpringBootApplication
+//class BasicsApplication
+
+
+fun String.apply(block: String.() -> Unit): String  {
+    block()
+    return this
+}
 
 fun main(args: Array<String>) {
 
-    //	runApplication<BasicsApplication>(*args)
+    //	runApplication<BasicsApplication>(*args)x
+    fun print(range: IntRange) = println(range)
+    val result = (1..2)
+        .apply { print(this.first) }
+        .let {
+            it.sum()
+        }
+
+    val x = listOf(1, 2, 3, 4, 5).map { it * 2 }
+
+    x.apply { println(this[0]) }
+
 
     val myHandler: ApplicationRunner = { println("Hello World!") }
 
     var myHandleAnonymous = { str: String -> str.length }
-    println (myHandleAnonymous("Hello World!"))
+    println(myHandleAnonymous("Hello World!"))
 
-    var list = listOf(1,2,3,4,5)
+    var list = listOf(1, 2, 3, 4, 5)
     val printer = { x: Int -> println(x) }
     list.forEach(printer)
     val runner = object : ApplicationRunner {
